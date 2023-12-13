@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 require('dotenv').config();
 
 // Connect to MongoDB
@@ -16,6 +18,12 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
+
+// Defining session instance
+const sessionInstance = session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false});
+app.use(sessionInstance);
+
 app.listen(process.env.PORT, () => {
     console.log(`Server listening on port ${process.env.PORT}`);
 });
