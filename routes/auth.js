@@ -12,7 +12,7 @@ passport.use(new LocalStrategy({
         if (!user) {
             return done(null, false);
         }
-        const isPasswordCorerct = await user.isPasswordCorerct(password);
+        const isPasswordCorerct = await user.isPasswordCorrect(password);
         if (!isPasswordCorerct) {
             return done(null, false);
         }
@@ -39,9 +39,13 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
     res.send({ message: 'You are now logged in.' });
 });
 
-router.post('/logout', (req, res) => {
-    req.logout();
-    res.send({ message: 'You are now logged out.' });
+router.get('/logout', (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.send({ message: 'You are now logged out.' });
+    });
 });
 
 router.post('/register', async (req, res) => {

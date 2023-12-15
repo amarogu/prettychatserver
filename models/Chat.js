@@ -18,6 +18,11 @@ const chatSchema = new mongoose.Schema({
         required: true
     },
     description: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     messages: [messageSchema],
 });
 
