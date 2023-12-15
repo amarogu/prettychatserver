@@ -4,7 +4,7 @@ const Chat = require('../models/Chat');
 
 router.get('/chats', isAuthenticated, async (req, res) => {
     try {
-        const chats = await Chat.find();
+        const chats = await Chat.find({ user: req.user._id });
         res.send(chats);
     } catch (error) {
         res.status(500).send({ error: error.message });
