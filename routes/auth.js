@@ -35,8 +35,22 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
-    res.send({ message: 'You are now logged in.' });
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            // Here you can customize the response when the user is not authenticated
+            return res.status(401).send({ message: 'Invalid credentials' });
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
+            }
+            return res.send({ message: 'You are now logged in.' });
+        });
+    })(req, res, next);
 });
 
 router.get('/logout', (req, res, next) => {

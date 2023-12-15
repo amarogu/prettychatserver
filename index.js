@@ -9,7 +9,8 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({origin: 'http://localhost:3000', // or wherever your client is running
+credentials: true}))
 
 // Defining session instance
 const sessionInstance = session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false});
